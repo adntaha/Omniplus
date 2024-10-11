@@ -1,4 +1,4 @@
-import {fetchDocumentFrom, getMonthIndexFromShortenedName, quotationMarksRegex, regexEscape} from '../../util/util';
+import {fetchDocumentFrom, getMonthIndexFromShortenedName, getMonthShortenedFromIndex, quotationMarksRegex, regexEscape} from '../../util/util';
 import {ElementBuilder} from '../rendering/element-builder';
 import {OverviewRenderInfo} from './render-info';
 import {LeaDocumentType, isFile} from './document-type';
@@ -328,11 +328,8 @@ export class LeaDocument extends BadgedCard<OverviewRenderInfo> {
 
     get formattedDate(): string {
         const dateStringParts = this.uploadDate.toDateString().split(' ');
-        // The date string has the following format:
-        // Weekday Month Date Year
-        // We desire the following format:
-        // Month Date, Year
-        return `${dateStringParts[1]} ${dateStringParts[2]}, ${dateStringParts[3]}`;
+        // similar to ../assignments/assignments.ts L337
+        return `${this.uploadDate.getDate()} ${getMonthShortenedFromIndex(this.uploadDate.getMonth())}, ${this.uploadDate.getFullYear()}`;
     }
 
     buildBadges(renderInfo: OverviewRenderInfo): Badge[] {
