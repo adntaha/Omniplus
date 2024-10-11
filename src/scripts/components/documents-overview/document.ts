@@ -231,7 +231,7 @@ export class LeaDocument extends BadgedCard<OverviewRenderInfo> {
             return new Date(year, month, day);
         } else if (dateString.startsWith('depuis le')) {
             // Handle Brebeuf, and likely other french CEGEPs.
-            const words = dateString.substring(9).split(/[\u00A0 \n]/g);
+            const words = dateString.substring(9).split(/[\u00A0 \n]/g).filter(Boolean);
             // See corresponding variable above: no need to remove the comma.
             const day = parseInt(words[0]);
             const month = getMonthIndexFromShortenedName(words[1]);
