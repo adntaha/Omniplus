@@ -74,10 +74,13 @@ export class CourseDocumentList extends Renderable<OverviewRenderInfo> {
                         title: getLanguage() === "FRA"
                             ? "Télécharger tous les documents non lus"
                             : "Download all unread documents",
-                        onclick: () => {
+                        onclick: (e: MouseEvent) => {
+                            if (!e.shiftKey) {
+                                this.documents = this.documents.filter((document) => !document.read);
+                            }
+
                             // Download each document and mark it as read.
                             this.documents
-                                .filter((document) => !document.read)
                                 .filter((document) => document.type !== LeaDocumentType.Link && document.type !== LeaDocumentType.YouTube)
                                 .map((document) => ({
                                     document,
@@ -89,9 +92,9 @@ export class CourseDocumentList extends Renderable<OverviewRenderInfo> {
                                     anchor.removeAttribute('download');
                                     document.markAsRead();
                                 });
+
                             // Call for a re-render when the read status has been updated.
                             this.rerender();
-
                         }
                     }).build()
         
