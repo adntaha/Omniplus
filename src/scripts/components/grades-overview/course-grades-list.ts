@@ -123,11 +123,11 @@ export class CourseGradesList extends Renderable<null> {
 
         // factor in bonus points
         const writenText = Array.from(page.querySelectorAll('.tb-sommaire table tr td:last-child font:not([color])'));
-        let actualFinalGrade = currentGrade;
+        const activeWeightSum = assessments.reduce((sum, assessment) => sum + (assessment.hasGrade ? assessment.weight : 0), 0);
+        let actualFinalGrade = currentGrade/activeWeightSum;
         if (writenText.length > 0) {
             console.log('Text found in class statistics:', writenText.map((element) => element.textContent));
-            const activeWeightSum = assessments.reduce((sum, assessment) => sum + (assessment.hasGrade ? assessment.weight : 0), 0);
-            actualFinalGrade = parseFloat((<HTMLElement>writenText[0]).parentElement.parentElement.parentElement.parentElement.parentElement.nextElementSibling.firstElementChild.textContent.replace('%',''))/100*activeWeightSum;
+            actualFinalGrade = parseFloat((<HTMLElement>writenText[0]).parentElement.parentElement.parentElement.parentElement.parentElement.nextElementSibling.firstElementChild.textContent.replace('%',''))/100;
         }
 
         return new CourseGradesList(courseName, courseCode, assessments, actualFinalGrade,
