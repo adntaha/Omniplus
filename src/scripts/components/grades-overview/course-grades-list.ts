@@ -154,9 +154,7 @@ export class CourseGradesList extends Renderable<null> {
         return this.hasAverage && this.hasStandardDeviation;
     }
     get zScore(): number {
-        // Account for the case where the student doesn't have all of their grades yet.
-        const currentGrade = (this.currentGrade / this.assessments.reduce((sum, assessment) => sum + (assessment.hasGrade ? assessment.weight : 0), 0));
-        return (currentGrade - this.classAverage) / this.standardDeviation;
+        return (this.currentGrade - this.classAverage) / this.standardDeviation;
     }
 
     updateDomElement(): void {
