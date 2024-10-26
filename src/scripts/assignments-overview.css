@@ -34,7 +34,7 @@
     /* Vertical flexbox */
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-content: flex-start;
 }
 
