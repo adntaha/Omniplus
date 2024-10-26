@@ -126,7 +126,8 @@ export class CourseGradesList extends Renderable<null> {
         let actualFinalGrade = currentGrade;
         if (writenText.length > 0) {
             console.log('Text found in class statistics:', writenText.map((element) => element.textContent));
-            actualFinalGrade = parseFloat((<HTMLElement>writenText[0]).parentElement.parentElement.parentElement.parentElement.parentElement.nextElementSibling.firstElementChild.textContent.replace('%',''))/100;
+            const activeWeightSum = assessments.reduce((sum, assessment) => sum + (assessment.hasGrade ? assessment.weight : 0), 0);
+            actualFinalGrade = parseFloat((<HTMLElement>writenText[0]).parentElement.parentElement.parentElement.parentElement.parentElement.nextElementSibling.firstElementChild.textContent.replace('%',''))/100*activeWeightSum;
         }
 
         return new CourseGradesList(courseName, courseCode, assessments, actualFinalGrade,
