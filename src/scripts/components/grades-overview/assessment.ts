@@ -60,23 +60,17 @@ export class Assessment extends Renderable<null> {
         const nameElement = <HTMLElement>element.childNodes.item(2);
         const name = (<HTMLElement>nameElement.firstElementChild).textContent;
 
-        console.log("name", name)
         const counted = !nameElement.innerText.includes('This mark will be discarded');
-        console.log("counted", counted)
 
         const gradeElement = <HTMLElement>element.childNodes.item(3);
         // If there is a grade, there will be more than one element specifying the grade marking and the percent grade.
-        console.log("getting grade")
         const grade = gradeElement.childNodes.length > 1 ?
             Assessment.extractGrade((<HTMLElement>gradeElement.firstElementChild).innerText) : undefined;
-        console.log("grade", grade)
 
 
         // If there is an average, the grade text will have more than 1 characters.
-        const averageElement = <HTMLElement>(<HTMLElement>element.childNodes.item(4)).firstElementChild;
-        console.log("getting average", averageElement)
-        const average = averageElement.innerText.length > 1 ? Assessment.extractGrade(averageElement.innerText) : undefined;
-        console.log("average", average)
+        const averageElement = <HTMLElement>(<HTMLElement>element.childNodes.item(4))?.firstElementChild;
+        const average = averageElement?.innerText?.length > 1 ? Assessment.extractGrade(averageElement.innerText) : undefined;
 
         const weightElement = <HTMLElement>element.childNodes.item(5);
         // The weight is displayed first in percentage "Weight%" alongside with the weighted vs. actual grade.
@@ -84,10 +78,10 @@ export class Assessment extends Renderable<null> {
         // actual ratio.
         let weight;
         if (weightElement.firstElementChild !== null) {
-            console.log("No weight found for element", element.textContent)
             weight = parseFloat((<HTMLElement>weightElement.firstElementChild).innerText.replace('%', '')) / 100;
         } else {
             // This happened for an absences row, so I'll set it as N/A in such cases.
+            console.log("No weight found for element", element.textContent)
             weight = NaN;
         }
 

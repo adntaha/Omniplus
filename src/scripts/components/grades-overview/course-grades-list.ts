@@ -94,7 +94,7 @@ export class CourseGradesList extends Renderable<null> {
         // To extract the class numbers (average, median, deviation), use the fact that they are in a separate
         // table, and are all the last elements of their parent.
         // Convert it to an array for easier access.
-        const classStatistics = Array.from(page.querySelectorAll('.tb-sommaire table tr td:last-child font'));
+        const classStatistics = Array.from(page.querySelectorAll('.tb-sommaire table tr td:last-child font[color]'));
         // The first number in the class statistics is always the class average.
         const classAverage = classStatistics.length > 0 ? this.extractDecimalFromOverviewPercentageElement(classStatistics[0]) : undefined;
         // The second is always the median.
@@ -121,7 +121,15 @@ export class CourseGradesList extends Renderable<null> {
         // Load in the grades graph.
         const graph = GradeProgressionGraph.loadFromCourseAssessmentsPage(page);
 
-        return new CourseGradesList(courseName, courseCode, assessments, currentGrade,
+        // factor in bonus points
+        const writenText = Array.from(page.querySelectorAll('.tb-sommaire table tr td:last-child font:not([color])'));
+        let actualFinalGrade = currentGrade;
+        if (writenText.length > 0) {
+            console.log('Text found in class statistics:', writenText.map((element) => element.textContent));
+            actualFinalGrade = parseFloat((<HTMLElement>writenText[0]).parentElement.parentElement.parentElement.parentElement.parentElement.nextElementSibling.firstElementChild.textContent.replace('%',''))/100;
+        }
+
+        return new CourseGradesList(courseName, courseCode, assessments, actualFinalGrade,
             classAverage, classMedian, standardDeviation, graph);
     }
 
