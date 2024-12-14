@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    overflow-x: scroll;
 
     /* Specify a height for wrapping, each card can extend this height but if it does, a card should not appear right after. */
     height: 100%;
